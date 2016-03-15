@@ -6,6 +6,10 @@ const PATHS = {
   dist: path.join(__dirname, 'dist')
 };
 
+const plugins = [
+  new webpack.HotModuleReplacementPlugin()
+];
+
 module.exports = {
   entry: PATHS.app,
   output: {
@@ -15,6 +19,15 @@ module.exports = {
   devServer: {
     contentBase: PATHS.dist,
     port: 8080,
+    // Enable history API fallback so HTML5 History API based
+    // routing works. This is a good default that will come
+    // in handy in more complicated setups.
+    historyApiFallback: true,
+    hot: true,
+    inline: true,
+    progress: true,
+    // Display only errors to reduce the amount of output.
+    stats: 'errors-only',
   },
   module: {
     loaders: [
@@ -33,5 +46,6 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: plugins
 };

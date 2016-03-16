@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const autoprefixer = require('autoprefixer-core');
 
 const release = (process.env.NODE_ENV === 'production');
 const localIdentName = release ? '_[hash:base64:5]' : '[path][name]---[local]---[hash:base64:5]';
@@ -69,11 +70,14 @@ module.exports = {
       {
         // Test expects a RegExp! Note the slashes!
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('css?sourceMap&-minimize&modules&localIdentName='+localIdentName+''),
+        loader: ExtractTextPlugin.extract('css?sourceMap&-minimize&modules&localIdentName='+localIdentName+'&importLoaders=1!postcss-loader'),
         // Include accepts either a path or an array of paths.
-        include: PATHS.app
+        include: PATHS.app,
       }
     ]
   },
-  plugins: plugins
+  plugins: plugins,
+  postcss: [
+    autoprefixer({ browsers: ['last 3 versions'] }),
+  ],
 };

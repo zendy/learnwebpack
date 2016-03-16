@@ -1,6 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 
+const TARGET = process.env.npm_lifecycle_event;
+process.env.BABEL_ENV = TARGET;
+
 const PATHS = {
   app: path.join(__dirname, 'app'),
   dist: path.join(__dirname, 'dist')

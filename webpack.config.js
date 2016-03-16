@@ -6,12 +6,22 @@ const PATHS = {
   dist: path.join(__dirname, 'dist')
 };
 
+const entry = {
+  app: PATHS.app,
+}
+
 const plugins = [
   new webpack.HotModuleReplacementPlugin()
 ];
 
 module.exports = {
-  entry: PATHS.app,
+  entry: entry,
+  // Add resolve.extensions.
+  // '' is needed to allow imports without an extension.
+  // Note the .'s before extensions as it will fail to match without!!!
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
   output: {
     filename: 'bundle.js',
     path: PATHS.dist
@@ -42,7 +52,8 @@ module.exports = {
         // In addition to being slow, that will most likely result in an error.
         include: PATHS.app,
         query: {
-          presets: 'es2015'
+          cacheDirectory: true,
+          presets: [ 'react', 'es2015' ]
         }
       }
     ]

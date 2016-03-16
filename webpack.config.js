@@ -1,5 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const release = (process.env.NODE_ENV === 'production');
+const localIdentName = release ? '_[hash:base64:5]' : '[path][name]---[local]---[hash:base64:5]';
 
 const TARGET = process.env.npm_lifecycle_event;
 process.env.BABEL_ENV = TARGET;
@@ -14,6 +18,9 @@ const entry = {
 }
 
 const plugins = [
+  new ExtractTextPlugin('bundle.css', {
+    relaxInvalidOrder: true,
+  }),
   new webpack.HotModuleReplacementPlugin()
 ];
 
@@ -23,7 +30,7 @@ module.exports = {
   // '' is needed to allow imports without an extension.
   // Note the .'s before extensions as it will fail to match without!!!
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx', '.css']
   },
   output: {
     filename: 'bundle.js',
@@ -58,6 +65,13 @@ module.exports = {
           cacheDirectory: true,
           presets: [ 'react', 'es2015' ]
         }
+      },
+      {
+        // Test expects a RegExp! Note the slashes!
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('css?sourceMap&-minimize&modules&localIdentName='+localIdentName+''),
+        // Include accepts either a path or an array of paths.
+        include: PATHS.app
       }
     ]
   },

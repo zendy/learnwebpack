@@ -1,3 +1,5 @@
-import componentMessage from "./component";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Note from './partials/Note';
 
-componentMessage( 'success' );
+ReactDOM.render( <Note />, document.getElementById('app') );
